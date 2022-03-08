@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
+import { IStore } from '../interfaces';
 import tournaments from './tournaments';
 
-const rootReducer = combineReducers({
+const rootReducer = combineReducers<IStore>({
   tournaments
 });
 

@@ -3,6 +3,7 @@ import theme from '../theme';
 
 const Button = styled.button`
   background: transparent;
+  cursor: pointer;
   border: 1px solid ${theme.palette.secondary.main};
   border-radius: ${theme.borderRadius};
   color: ${theme.palette.primary.main};
