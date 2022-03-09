@@ -3,7 +3,8 @@ import {
   ITournamentsActions,
   TOURNAMENTS_LOADING,
   TOURNAMENTS_LOADED,
-  TOURNAMENTS_LOAD_FAILED
+  TOURNAMENTS_LOAD_FAILED,
+  TOURNAMENTS_SEARCH_TEXT_UPDATED
 } from '../actions/tournaments';
 import { ITournamentsState } from '../interfaces';
 import { Tournament } from '../objects';
@@ -12,6 +13,7 @@ class TournamentsState implements ITournamentsState {
   constructor(
     public tournaments: Tournament[] = [],
     public tournamentsLoading: boolean = false,
+    public searchText: string = '',
     public error: string = ''
   ) {}
 }
@@ -40,6 +42,13 @@ const tournaments: Reducer<TournamentsState, ITournamentsActions> = (
         tournamentsLoading: false,
         tournaments: [],
         error: action.error
+      };
+    case TOURNAMENTS_SEARCH_TEXT_UPDATED:
+      return {
+        ...state,
+        tournamentsLoading: true,
+        searchText: action.searchText,
+        error: ''
       };
     default:
       return state;

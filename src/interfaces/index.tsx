@@ -23,5 +23,6 @@ export interface IStore {
 export interface ITournamentsState {
   readonly tournaments: Tournament[];
   readonly tournamentsLoading: boolean;
+  readonly searchText: string;
   readonly error: string;
 }

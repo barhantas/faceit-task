@@ -15,6 +15,9 @@ export const TOURNAMENTS_LOADED = 'TOURNAMENTS_LOADED';
 export type TOURNAMENTS_LOADED = typeof TOURNAMENTS_LOADED;
 export const TOURNAMENTS_LOAD_FAILED = 'TOURNAMENTS_LOAD_FAILED';
 export type TOURNAMENTS_LOAD_FAILED = typeof TOURNAMENTS_LOAD_FAILED;
+export const TOURNAMENTS_SEARCH_TEXT_UPDATED =
+  'TOURNAMENTS_SEARCH_TEXT_UPDATED';
+export type TOURNAMENTS_SEARCH_TEXT_UPDATED = typeof TOURNAMENTS_SEARCH_TEXT_UPDATED;
 
 export interface ITournamentsLoading extends Action {
   type: TOURNAMENTS_LOADING;
@@ -30,10 +33,16 @@ export interface ITournamentsLoadFailed extends Action {
   error: string;
 }
 
+export interface ITournamentsSearchTextUpdated extends Action {
+  type: TOURNAMENTS_SEARCH_TEXT_UPDATED;
+  searchText: string;
+}
+
 export type ITournamentsActions =
   | ITournamentsLoading
   | ITournamentsLoaded
-  | ITournamentsLoadFailed;
+  | ITournamentsLoadFailed
+  | ITournamentsSearchTextUpdated;
 
 export const tournamentsLoading = (loading: boolean) => {
   return { type: TOURNAMENTS_LOADING, loading };
@@ -47,16 +56,17 @@ export const tournamentsLoadFailed = (error: string) => {
   return { type: TOURNAMENTS_LOAD_FAILED, error };
 };
 
-export const fetchTournaments = (): Tournament[] => {
+export const tournamentsSearchTextUpdated = (searchText: string) => {
+  return { type: TOURNAMENTS_SEARCH_TEXT_UPDATED, searchText };
+};
+
+export const fetchTournaments = (q?: string): Tournament[] => {
   //@ts-ignore
   return dispatch => {
     dispatch(tournamentsLoading(true));
 
-    fetch(API_TOURNAMENTS_URL)
+    fetch(`${API_TOURNAMENTS_URL}?q=${q ?? ''}`)
       .then(response => {
-        //uncomment for testing error case
-        // throw Error(response.statusText);
-
         if (!response.ok) {
           throw Error(response.statusText);
         }

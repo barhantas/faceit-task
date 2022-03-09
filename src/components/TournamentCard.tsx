@@ -29,7 +29,9 @@ const TournamentCard: React.FC<TournamentCardProps> = (
   const formattedStartDate = startDateObject.toLocaleDateString(LOCALE);
   const formattedStartDateTime = startDateObject.toLocaleTimeString(LOCALE);
 
-  const handleEditClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleEditClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void => {
     const newTournamentName = prompt('New Tournament Name:', name);
     console.log(newTournamentName);
 
@@ -38,7 +40,9 @@ const TournamentCard: React.FC<TournamentCardProps> = (
     }
   };
 
-  const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDeleteClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ): void => {
     if (window.confirm('Do you really want to delete this tournament?')) {
       dispatch(deleteTournament(new DeleteTournament(id)));
     }
