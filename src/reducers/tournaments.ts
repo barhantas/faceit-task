@@ -5,6 +5,7 @@ import {
   TOURNAMENTS_LOADED,
   TOURNAMENTS_LOAD_FAILED,
   TOURNAMENTS_SEARCH_TEXT_UPDATED,
+  TOURNAMENT_CREATED,
   TOURNAMENT_UPDATED,
   TOURNAMENT_DELETED
 } from '../actions/tournaments';
@@ -51,9 +52,20 @@ const tournaments: Reducer<TournamentsState, ITournamentsActions> = (
         searchText: action.searchText,
         error: ''
       };
+    case TOURNAMENT_CREATED:
+      const updatedTournamentsObject = Object.assign(
+        { [action.newTournament.id]: action.newTournament },
+        state.tournamentsObject
+      );
+
+      return {
+        ...state,
+        tournamentsObject: updatedTournamentsObject
+      };
     case TOURNAMENT_UPDATED:
       state.tournamentsObject[action.updatedTournament.id] =
         action.updatedTournament;
+
       return {
         ...state
       };

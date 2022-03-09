@@ -19,6 +19,8 @@ export type TOURNAMENTS_LOAD_FAILED = typeof TOURNAMENTS_LOAD_FAILED;
 export const TOURNAMENTS_SEARCH_TEXT_UPDATED =
   'TOURNAMENTS_SEARCH_TEXT_UPDATED';
 export type TOURNAMENTS_SEARCH_TEXT_UPDATED = typeof TOURNAMENTS_SEARCH_TEXT_UPDATED;
+export const TOURNAMENT_CREATED = 'TOURNAMENT_CREATED';
+export type TOURNAMENT_CREATED = typeof TOURNAMENT_CREATED;
 export const TOURNAMENT_UPDATED = 'TOURNAMENT_UPDATED';
 export type TOURNAMENT_UPDATED = typeof TOURNAMENT_UPDATED;
 export const TOURNAMENT_DELETED = 'TOURNAMENT_DELETED';
@@ -43,6 +45,11 @@ export interface ITournamentsSearchTextUpdated extends Action {
   searchText: string;
 }
 
+export interface ITournamentCreated extends Action {
+  type: TOURNAMENT_CREATED;
+  newTournament: Tournament;
+}
+
 export interface ITournamentUpdated extends Action {
   type: TOURNAMENT_UPDATED;
   updatedTournament: Tournament;
@@ -58,6 +65,7 @@ export type ITournamentsActions =
   | ITournamentsLoaded
   | ITournamentsLoadFailed
   | ITournamentsSearchTextUpdated
+  | ITournamentCreated
   | ITournamentUpdated
   | ITournamentDeleted;
 
@@ -75,6 +83,10 @@ export const tournamentsLoadFailed = (error: string) => {
 
 export const tournamentsSearchTextUpdated = (searchText: string) => {
   return { type: TOURNAMENTS_SEARCH_TEXT_UPDATED, searchText };
+};
+
+export const tournamentCreated = (newTournament: Tournament) => {
+  return { type: TOURNAMENT_CREATED, newTournament };
 };
 
 export const tournamentUpdated = (updatedTournament: Tournament) => {
@@ -140,24 +152,21 @@ export const createTournament = (newTournament: NewTournament): Tournament => {
         return response;
       })
       .then(response => response.json())
-      .then(
-        (item: ITournament) => console.log('item', item)
-        // dispatch(
-        //   tournamentsLoaded(
-        //     items.map(
-        //       ({ id, name, organizer, game, participants, startDate }) =>
-        //         new Tournament(
-        //           id,
-        //           name,
-        //           organizer,
-        //           game,
-        //           new ParticipantInfo(participants.current, participants.max),
-        //           startDate
-        //         )
-        //     )
-        //   )
-        // )
-      )
+      .then((item: ITournament) => {
+        const { id, name, organizer, game, participants, startDate } = item;
+        dispatch(
+          tournamentCreated(
+            new Tournament(
+              id,
+              name,
+              organizer,
+              game,
+              new ParticipantInfo(participants.current, participants.max),
+              startDate
+            )
+          )
+        );
+      })
       .catch(error => dispatch(tournamentsLoadFailed(error)));
   };
 };
