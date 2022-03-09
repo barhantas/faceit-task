@@ -6,8 +6,9 @@ import theme from '../theme';
 import H6 from './H6';
 import Button from './Button';
 import { deleteTournament, updateTournament } from '../actions/tournaments';
+import moment from 'moment-timezone';
 
-const LOCALE = 'en-Gb';
+const LOCALE = 'Europe/London';
 interface TournamentCardProps {
   tournament: Tournament;
 }
@@ -25,15 +26,10 @@ const TournamentCard: React.FC<TournamentCardProps> = (
   } = props.tournament;
   const dispatch = useDispatch();
 
-  const startDateObject = new Date(startDate);
-  const formattedStartDate = startDateObject.toLocaleDateString(LOCALE);
-  const formattedStartDateTime = startDateObject.toLocaleTimeString(LOCALE);
-
   const handleEditClick = (
     event: React.MouseEvent<HTMLButtonElement>
   ): void => {
     const newTournamentName = prompt('New Tournament Name:', name);
-    console.log(newTournamentName);
 
     if (newTournamentName) {
       dispatch(updateTournament(new UpdateTournament(id, newTournamentName)));
@@ -55,8 +51,10 @@ const TournamentCard: React.FC<TournamentCardProps> = (
       <p>{`Organizer: ${organizer}`}</p>
       <p>{`Game: ${game}`}</p>
       <p>{`Participants: ${participants.current}/${participants.max}`}</p>
-      <p>{`Start: ${startDate}`}</p>
-      <p>{`Start: ${formattedStartDate}, ${formattedStartDateTime}`}</p>
+      <p>{`Start: ${moment(startDate)
+        .tz(LOCALE)
+        .format('DD/MM/YYYY, HH:mm:ss')}`}</p>
+
       <Button onClick={handleEditClick}>EDIT</Button>
       <DeleteButton onClick={handleDeleteClick}>DELETE</DeleteButton>
     </Wrapper>

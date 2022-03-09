@@ -27,6 +27,8 @@ const Header: React.FC = () => {
     }
 
     debouncedSearch(searchText);
+
+    return debouncedSearch.cancel;
   }, [searchText]);
 
   const debouncedSearch = debounce((searchText: string) => {
