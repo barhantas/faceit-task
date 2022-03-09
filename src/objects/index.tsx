@@ -2,6 +2,12 @@ export class NewTournament {
   constructor(public name: string) {}
 }
 
+export class UpdateTournament extends NewTournament {
+  constructor(public id: string, name: string) {
+    super(name);
+  }
+}
+
 export class Tournament extends NewTournament {
   constructor(
     public id: string,
@@ -13,6 +19,10 @@ export class Tournament extends NewTournament {
   ) {
     super(name);
   }
+}
+
+export class DeleteTournament {
+  constructor(public id: string) {}
 }
 
 export class ParticipantInfo {

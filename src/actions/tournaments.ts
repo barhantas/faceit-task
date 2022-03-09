@@ -1,6 +1,12 @@
 import { Action } from 'redux';
 import { API_TOURNAMENTS_URL } from '../constants/api';
-import { NewTournament, ParticipantInfo, Tournament } from '../objects';
+import {
+  DeleteTournament,
+  NewTournament,
+  ParticipantInfo,
+  Tournament,
+  UpdateTournament
+} from '../objects';
 import { RootState } from '../reducers';
 
 export const TOURNAMENTS_LOADING = 'TOURNAMENTS_LOADING';
@@ -41,7 +47,7 @@ export const tournamentsLoadFailed = (error: string) => {
   return { type: TOURNAMENTS_LOAD_FAILED, error };
 };
 
-export const fetchTournaments = () => {
+export const fetchTournaments = (): Tournament[] => {
   //@ts-ignore
   return dispatch => {
     dispatch(tournamentsLoading(true));
@@ -81,7 +87,7 @@ export const fetchTournaments = () => {
   };
 };
 
-export const createTournament = (newTournament: NewTournament) => {
+export const createTournament = (newTournament: NewTournament): Tournament => {
   //@ts-ignore
   return dispatch => {
     fetch(API_TOURNAMENTS_URL, {
@@ -91,6 +97,87 @@ export const createTournament = (newTournament: NewTournament) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newTournament)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(response => response.json())
+      .then(
+        (item: Tournament) => console.log('item', item)
+        // dispatch(
+        //   tournamentsLoaded(
+        //     items.map(
+        //       ({ id, name, organizer, game, participants, startDate }) =>
+        //         new Tournament(
+        //           id,
+        //           name,
+        //           organizer,
+        //           game,
+        //           new ParticipantInfo(participants.current, participants.max),
+        //           startDate
+        //         )
+        //     )
+        //   )
+        // )
+      )
+      .catch(error => dispatch(tournamentsLoadFailed(error)));
+  };
+};
+
+export const updateTournament = (
+  updateTournament: UpdateTournament
+): Tournament => {
+  //@ts-ignore
+  return dispatch => {
+    fetch(`${API_TOURNAMENTS_URL}/${updateTournament.id}`, {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateTournament)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(response => response.json())
+      .then(
+        (item: Tournament) => console.log('item', item)
+        // dispatch(
+        //   tournamentsLoaded(
+        //     items.map(
+        //       ({ id, name, organizer, game, participants, startDate }) =>
+        //         new Tournament(
+        //           id,
+        //           name,
+        //           organizer,
+        //           game,
+        //           new ParticipantInfo(participants.current, participants.max),
+        //           startDate
+        //         )
+        //     )
+        //   )
+        // )
+      )
+      .catch(error => dispatch(tournamentsLoadFailed(error)));
+  };
+};
+
+export const deleteTournament = (deleteTournament: DeleteTournament): null => {
+  //@ts-ignore
+  return dispatch => {
+    fetch(`${API_TOURNAMENTS_URL}/${deleteTournament.id}`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
     })
       .then(response => {
         if (!response.ok) {

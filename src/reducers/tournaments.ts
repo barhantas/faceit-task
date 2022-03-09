@@ -24,13 +24,15 @@ const tournaments: Reducer<TournamentsState, ITournamentsActions> = (
     case TOURNAMENTS_LOADING:
       return {
         ...state,
-        tournamentsLoading: true
+        tournamentsLoading: true,
+        error: ''
       };
     case TOURNAMENTS_LOADED:
       return {
         ...state,
         tournamentsLoading: false,
-        tournaments: action.tournaments
+        tournaments: action.tournaments,
+        error: ''
       };
     case TOURNAMENTS_LOAD_FAILED:
       return {
