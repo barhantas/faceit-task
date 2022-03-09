@@ -10,7 +10,7 @@ import { IStore } from '../interfaces';
 const TournamentListContainer: React.FC = () => {
   const dispatch = useDispatch();
   const tournamentsReducer = useSelector((state: IStore) => state.tournaments);
-  const { tournaments, tournamentsLoading, error } = tournamentsReducer;
+  const { tournamentsObject, tournamentsLoading, error } = tournamentsReducer;
   useEffect(() => {
     getTournaments();
   }, []);
@@ -38,15 +38,18 @@ const TournamentListContainer: React.FC = () => {
     );
   }
 
-  if (!tournaments.length) {
+  if (!Object.keys(tournamentsObject).length) {
     return <CenteredBox>No tournaments found.</CenteredBox>;
   }
 
   return (
     //use better grid
     <GridContainer>
-      {tournaments.map((tournament, index) => (
-        <TournamentCard key={index} tournament={tournament} />
+      {Object.keys(tournamentsObject).map((tournamentId, index) => (
+        <TournamentCard
+          key={index}
+          tournament={tournamentsObject[tournamentId]}
+        />
       ))}
     </GridContainer>
   );

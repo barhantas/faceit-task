@@ -4,14 +4,15 @@ import {
   TOURNAMENTS_LOADING,
   TOURNAMENTS_LOADED,
   TOURNAMENTS_LOAD_FAILED,
-  TOURNAMENTS_SEARCH_TEXT_UPDATED
+  TOURNAMENTS_SEARCH_TEXT_UPDATED,
+  TOURNAMENT_UPDATED,
+  TOURNAMENT_DELETED
 } from '../actions/tournaments';
-import { ITournamentsState } from '../interfaces';
-import { Tournament } from '../objects';
+import { ITournamentsState, TournamentsObject } from '../interfaces';
 
 class TournamentsState implements ITournamentsState {
   constructor(
-    public tournaments: Tournament[] = [],
+    public tournamentsObject: TournamentsObject = {},
     public tournamentsLoading: boolean = false,
     public searchText: string = '',
     public error: string = ''
@@ -33,14 +34,14 @@ const tournaments: Reducer<TournamentsState, ITournamentsActions> = (
       return {
         ...state,
         tournamentsLoading: false,
-        tournaments: action.tournaments,
+        tournamentsObject: action.tournamentsObject,
         error: ''
       };
     case TOURNAMENTS_LOAD_FAILED:
       return {
         ...state,
         tournamentsLoading: false,
-        tournaments: [],
+        tournamentsObject: {},
         error: action.error
       };
     case TOURNAMENTS_SEARCH_TEXT_UPDATED:
@@ -50,6 +51,18 @@ const tournaments: Reducer<TournamentsState, ITournamentsActions> = (
         searchText: action.searchText,
         error: ''
       };
+    case TOURNAMENT_UPDATED:
+      state.tournamentsObject[action.updatedTournament.id] =
+        action.updatedTournament;
+      return {
+        ...state
+      };
+    case TOURNAMENT_DELETED:
+      delete state.tournamentsObject[action.tournamentId];
+      return {
+        ...state
+      };
+
     default:
       return state;
   }

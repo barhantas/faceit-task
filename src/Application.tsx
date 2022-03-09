@@ -8,9 +8,9 @@ import { IStore } from './interfaces';
 
 const App: React.FC = () => {
   const tournamentsReducer = useSelector((state: IStore) => state.tournaments);
-  const { tournaments, tournamentsLoading } = tournamentsReducer;
+  const { tournamentsObject, tournamentsLoading } = tournamentsReducer;
   useEffect(() => {
-    console.log('tournaments', tournaments);
+    console.log('tournamentsObject', tournamentsObject);
     console.log('tournamentsLoading', tournamentsLoading);
   }, []);
 
