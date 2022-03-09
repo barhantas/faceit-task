@@ -1,6 +1,6 @@
 import { Action } from 'redux';
 import { API_TOURNAMENTS_URL } from '../constants/api';
-import { ParticipantInfo, Tournament } from '../objects';
+import { NewTournament, ParticipantInfo, Tournament } from '../objects';
 import { RootState } from '../reducers';
 
 export const TOURNAMENTS_LOADING = 'TOURNAMENTS_LOADING';
@@ -76,6 +76,46 @@ export const fetchTournaments = () => {
             )
           )
         )
+      )
+      .catch(error => dispatch(tournamentsLoadFailed(error)));
+  };
+};
+
+export const createTournament = (newTournament: NewTournament) => {
+  //@ts-ignore
+  return dispatch => {
+    fetch(API_TOURNAMENTS_URL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newTournament)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(response => response.json())
+      .then(
+        (item: Tournament) => console.log('item', item)
+        // dispatch(
+        //   tournamentsLoaded(
+        //     items.map(
+        //       ({ id, name, organizer, game, participants, startDate }) =>
+        //         new Tournament(
+        //           id,
+        //           name,
+        //           organizer,
+        //           game,
+        //           new ParticipantInfo(participants.current, participants.max),
+        //           startDate
+        //         )
+        //     )
+        //   )
+        // )
       )
       .catch(error => dispatch(tournamentsLoadFailed(error)));
   };
