@@ -44,7 +44,6 @@ const TournamentListContainer: React.FC = () => {
   }
 
   return (
-    //use better grid
     <GridContainer>
       {Object.keys(tournamentsObject).map((tournamentId, index) => (
         <TournamentCard
