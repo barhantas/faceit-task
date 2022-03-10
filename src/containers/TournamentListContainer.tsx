@@ -11,6 +11,7 @@ const TournamentListContainer: React.FC = () => {
   const dispatch = useDispatch();
   const tournamentsReducer = useSelector((state: IStore) => state.tournaments);
   const { tournamentsObject, tournamentsLoading, error } = tournamentsReducer;
+
   useEffect(() => {
     getTournaments();
   }, []);

@@ -8,7 +8,6 @@ import {
   Tournament,
   UpdateTournament
 } from '../objects';
-import { RootState } from '../reducers';
 
 export const TOURNAMENTS_LOADING = 'TOURNAMENTS_LOADING';
 export type TOURNAMENTS_LOADING = typeof TOURNAMENTS_LOADING;
@@ -69,38 +68,48 @@ export type ITournamentsActions =
   | ITournamentUpdated
   | ITournamentDeleted;
 
-export const tournamentsLoading = (loading: boolean) => {
-  return { type: TOURNAMENTS_LOADING, loading };
+export const tournamentsLoading = (): ITournamentsLoading => {
+  return { type: TOURNAMENTS_LOADING };
 };
 
-export const tournamentsLoaded = (tournamentsObject: TournamentsObject) => {
+export const tournamentsLoaded = (
+  tournamentsObject: TournamentsObject
+): ITournamentsLoaded => {
   return { type: TOURNAMENTS_LOADED, tournamentsObject };
 };
 
-export const tournamentsLoadFailed = (error: string) => {
+export const tournamentsLoadFailed = (
+  error: string
+): ITournamentsLoadFailed => {
   return { type: TOURNAMENTS_LOAD_FAILED, error };
 };
 
-export const tournamentsSearchTextUpdated = (searchText: string) => {
+export const tournamentsSearchTextUpdated = (
+  searchText: string
+): ITournamentsSearchTextUpdated => {
   return { type: TOURNAMENTS_SEARCH_TEXT_UPDATED, searchText };
 };
 
-export const tournamentCreated = (newTournament: Tournament) => {
+export const tournamentCreated = (
+  newTournament: Tournament
+): ITournamentCreated => {
   return { type: TOURNAMENT_CREATED, newTournament };
 };
 
-export const tournamentUpdated = (updatedTournament: Tournament) => {
+export const tournamentUpdated = (
+  updatedTournament: Tournament
+): ITournamentUpdated => {
   return { type: TOURNAMENT_UPDATED, updatedTournament };
 };
 
-export const tournamentDeleted = (tournamentId: string) => {
+export const tournamentDeleted = (tournamentId: string): ITournamentDeleted => {
   return { type: TOURNAMENT_DELETED, tournamentId };
 };
 
 export const fetchTournaments = (q?: string): Tournament[] => {
   //@ts-ignore
   return dispatch => {
-    dispatch(tournamentsLoading(true));
+    dispatch(tournamentsLoading());
 
     fetch(`${API_TOURNAMENTS_URL}?q=${q ?? ''}`)
       .then(response => {
@@ -108,7 +117,7 @@ export const fetchTournaments = (q?: string): Tournament[] => {
           throw Error(response.statusText);
         }
 
-        dispatch(tournamentsLoading(false));
+        dispatch(tournamentsLoading());
 
         return response;
       })
