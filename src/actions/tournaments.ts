@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { API_TOURNAMENTS_URL } from '../constants/api';
 import { ITournament, TournamentsObject } from '../interfaces';
 import {
@@ -106,11 +106,13 @@ export const tournamentDeleted = (tournamentId: string): ITournamentDeleted => {
   return { type: TOURNAMENT_DELETED, tournamentId };
 };
 
-export const fetchTournaments = (q?: string): Tournament[] => {
-  //@ts-ignore
-  return dispatch => {
+export const fetchTournaments = (q?: string) => {
+  return (
+    dispatch: Dispatch<
+      ITournamentsLoading | ITournamentsLoaded | ITournamentsLoadFailed
+    >
+  ) => {
     dispatch(tournamentsLoading());
-
     fetch(`${API_TOURNAMENTS_URL}?q=${q ?? ''}`)
       .then(response => {
         if (!response.ok) {
@@ -143,9 +145,8 @@ export const fetchTournaments = (q?: string): Tournament[] => {
   };
 };
 
-export const createTournament = (newTournament: NewTournament): Tournament => {
-  //@ts-ignore
-  return dispatch => {
+export const createTournament = (newTournament: NewTournament) => {
+  return (dispatch: Dispatch<ITournamentCreated | ITournamentsLoadFailed>) => {
     fetch(API_TOURNAMENTS_URL, {
       method: 'POST',
       headers: {
@@ -180,11 +181,8 @@ export const createTournament = (newTournament: NewTournament): Tournament => {
   };
 };
 
-export const updateTournament = (
-  updateTournament: UpdateTournament
-): Tournament => {
-  //@ts-ignore
-  return dispatch => {
+export const updateTournament = (updateTournament: UpdateTournament) => {
+  return (dispatch: Dispatch<ITournamentUpdated | ITournamentsLoadFailed>) => {
     fetch(`${API_TOURNAMENTS_URL}/${updateTournament.id}`, {
       method: 'PATCH',
       headers: {
@@ -219,9 +217,8 @@ export const updateTournament = (
   };
 };
 
-export const deleteTournament = (deleteTournament: DeleteTournament): null => {
-  //@ts-ignore
-  return dispatch => {
+export const deleteTournament = (deleteTournament: DeleteTournament) => {
+  return (dispatch: Dispatch<ITournamentDeleted | ITournamentsLoadFailed>) => {
     fetch(`${API_TOURNAMENTS_URL}/${deleteTournament.id}`, {
       method: 'DELETE',
       headers: {
